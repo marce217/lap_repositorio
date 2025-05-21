@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cuestionario de Historia</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
+    h1 { text-align: center; }
+    .question { margin-bottom: 20px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+    .question p { margin: 0 0 10px; }
+    button { padding: 10px 15px; font-size: 16px; }
+    #result { font-size: 18px; font-weight: bold; text-align: center; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Cuestionario de Historia</h1>
+  <form id="quizForm">
+    <div id="quizContainer"></div>
+    <button type="submit">Enviar respuestas</button>
+  </form>
+  <div id="result"></div>  <script>
+    const preguntas = [
+      { pregunta: "¿Hace aproximadamente cuántos años comenzó el poblamiento de América?", opciones: ["10,000 años", "20,000 años", "30,000 años", "40,000 años"], correcta: 2 },
+      { pregunta: "¿Qué hipótesis explica el poblamiento de América mediante el cruce del Estrecho de Bering?", opciones: ["Hipótesis polinésica", "Hipótesis del estrecho de Bering", "Hipótesis africana", "Hipótesis europea"], correcta: 1 },
+      { pregunta: "¿Qué región de América fue considerada parte de la 'América nuclear'?", opciones: ["Aridoamérica", "Oasisamérica", "Mesoamérica", "Patagonia"], correcta: 2 },
+      { pregunta: "¿Qué cultura se desarrolló en la región Andina?", opciones: ["Olmeca", "Inca", "Maya", "Mexica"], correcta: 1 },
+      { pregunta: "¿Qué grupo habitaba las Antillas Menores y era considerado de bajo desarrollo cultural?", opciones: ["Mayas", "Caribes", "Tarascos", "Tlaxcaltecas"], correcta: 1 },
+      { pregunta: "¿Qué caracterizaba a Aridoamérica?", opciones: ["Zonas desérticas y grupos nómadas", "Grandes ciudades-Estado", "Agricultura intensiva", "Selvas tropicales"], correcta: 0 },
+      { pregunta: "¿Qué cultura destacó en Oasisamérica, específicamente en Paquimé?", opciones: ["Mexica", "Cultura de Casas Grandes", "Olmeca", "Inca"], correcta: 1 },
+      { pregunta: "¿Cuál era la frontera norte de Mesoamérica?", opciones: ["Río Amazonas", "Río Sinaloa y Pánuco", "Río Mississippi", "Río Orinoco"], correcta: 1 },
+      { pregunta: "¿Qué civilización mesoamericana construyó Teotihuacán?", opciones: ["Mayas", "Teotihuacanos", "Zapotecas", "Toltecas"], correcta: 1 },
+      { pregunta: "¿Qué periodo mesoamericano se caracterizó por el militarismo y las migraciones constantes?", opciones: ["Preclásico", "Clásico", "Posclásico", "Lítico"], correcta: 2 },
+      { pregunta: "¿Qué grupos indígenas habitaban el norte de Sinaloa y eran seminómadas?", opciones: ["Totonacas", "Achires", "Mayas", "Purépechas"], correcta: 1 },
+      { pregunta: "¿Qué actividad económica practicaban los cahitas en Sinaloa?", opciones: ["Minería", "Agricultura y pesca", "Comercio a larga distancia", "Ganadería"], correcta: 1 },
+      { pregunta: "¿Qué juego practicaban los cahitas utilizando una pelota de hule?", opciones: ["Pok-ta-pok", "Ulama", "Patolli", "Pelota mixteca"], correcta: 1 },
+      { pregunta: "¿Qué grupo habitaba la Sierra Madre Occidental en Sinaloa y Durango?", opciones: ["Acaxes y xiximes", "Tlaxcaltecas", "Mexicas", "Tarascos"], correcta: 0 },
+      { pregunta: "¿Qué producto cultivaban los totorames en Sinaloa?", opciones: ["Cacao", "Maíz y algodón", "Tabaco", "Café"], correcta: 1 },
+      { pregunta: "¿Qué rasgo físico es común en la población mexicana debido a la herencia indígena?", opciones: ["Piel morena y pómulos altos", "Ojos azules", "Cabello rubio", "Estatura muy elevada"], correcta: 0 },
+      { pregunta: "¿Qué palabra de origen náhuatl se usa comúnmente en México para referirse a un amigo?", opciones: ["Chamaco", "Cuate", "Escuincle", "Tlacuache"], correcta: 1 },
+      { pregunta: "¿Qué alimento de origen prehispánico sigue consumiéndose en México?", opciones: ["Hamburguesa", "Tlacoyos", "Pizza", "Sushi"], correcta: 1 },
+      { pregunta: "¿Qué planta medicinal usaban los mexicas para tratar heridas?", opciones: ["Maguey", "Cactus", "Aloe vera", "Eucalipto"], correcta: 0 },
+      { pregunta: "¿Qué animal domesticaron los mesoamericanos y aún se consume en México?", opciones: ["Caballo", "Pavo (guajolote)", "Vaca", "Oveja"], correcta: 1 },
+      { pregunta: "¿Qué grupo indígena era considerado 'agricultor avanzado'?", opciones: ["Recolectores simples", "Cazadores chichimecas", "Mexicas", "Nómadas de Baja California"], correcta: 2 },
+      { pregunta: "¿Qué producto comercializaban los mexicas mediante trueque?", opciones: ["Oro y plata", "Especias", "Cacao y algodón", "Sal y pieles"], correcta: 2 },
+      { pregunta: "¿Qué sistema de cultivo utilizaban los mexicas en el lago de Texcoco?", opciones: ["Terrazas", "Chinampas", "Riego por goteo", "Roza y quema"], correcta: 1 },
+      { pregunta: "¿Qué clase social en el Imperio mexica estaba exenta de pagar tributos?", opciones: ["Macehualtin", "Pochtecas", "Pipiltin", "Mayeques"], correcta: 2 },
+      { pregunta: "¿Qué función tenían los calpullis en la organización social mexica?", opciones: ["Centros religiosos", "Unidades territoriales y administrativas", "Mercados itinerantes", "Escuelas militares"], correcta: 1 },
+      { pregunta: "¿Quién fue el líder mexica durante la caída de Tenochtitlán?", opciones: ["Moctezuma II", "Cuitláhuac", "Cuauhtémoc", "Itzcóatl"], correcta: 2 },
+      { pregunta: "¿Qué grupo indígena se alió con Cortés para derrotar a los mexicas?", opciones: ["Purépechas", "Tlaxcaltecas", "Mayas", "Zapotecas"], correcta: 1 },
+      { pregunta: "¿Qué enfermedad diezmó a la población indígena durante la Conquista?", opciones: ["Viruela", "Cólera", "Malaria", "Tuberculosis"], correcta: 0 },
+      { pregunta: "¿Qué ciudad fundó Cortés como base para la Conquista de Tenochtitlán?", opciones: ["Veracruz", "Puebla", "Guadalajara", "Oaxaca"], correcta: 0 },
+      { pregunta: "¿Qué instrumento de navegación utilizaron los españoles para llegar a América?", opciones: ["Astrolabio", "Telescopio", "Reloj de sol", "Barómetro"], correcta: 0 },
+      { pregunta: "¿Qué sistema de escritura desarrollaron los mayas?", opciones: ["Alfabeto latino", "Jeroglíficos", "Cuneiforme", "Ideogramas chinos"], correcta: 1 },
+      { pregunta: "¿Qué edificio mesoamericano es famoso por sus murales en Bonampak?", opciones: ["Pirámide del Sol", "Templo de las Inscripciones", "Templo de los Jaguares", "Templo Mayor"], correcta: 2 },
+      { pregunta: "¿Qué producto mesoamericano se usaba como moneda?", opciones: ["Maíz", "Cacao", "Frijol", "Sal"], correcta: 1 },
+      { pregunta: "¿Qué dios mexica estaba asociado con la guerra y el sol?", opciones: ["Quetzalcóatl", "Tláloc", "Huitzilopochtli", "Tezcatlipoca"], correcta: 2 },
+      { pregunta: "¿Qué calendario utilizaban los mexicas para rituales religiosos?", opciones: ["Calendario solar", "Calendario lunar", "Tonalpohualli", "Calendario gregoriano"], correcta: 2 },
+      { pregunta: "¿Qué motivó a los europeos a buscar nuevas rutas comerciales en el siglo XV?", opciones: ["Bloqueo del Imperio otomano", "Invasión mongol", "Guerra en Europa", "Cambio climático"], correcta: 0 },
+      { pregunta: "¿Qué navegante demostró que la Tierra es redonda al circunnavegarla?", opciones: ["Cristóbal Colón", "Hernán Cortés", "Fernando Magallanes", "Vasco de Gama"], correcta: 2 },
+      { pregunta: "¿Qué producto asiático era altamente valorado en Europa?", opciones: ["Café", "Especias", "Arroz", "Té"], correcta: 1 },
+      { pregunta: "¿Qué reino europeo lideró la exploración de nuevas rutas marítimas?", opciones: ["España y Portugal", "Inglaterra", "Francia", "Holanda"], correcta: 0 },
+      { pregunta: "¿Qué tecnología fue clave para la navegación en el siglo XV?", opciones: ["Brújula", "Motor de vapor", "Imprenta", "Telescopio"], correcta: 0 }
+    ];
+
+    const container = document.getElementById('quizContainer');
+    preguntas.forEach((q, i) => {
+      const div = document.createElement('div');
+      div.className = 'question';
+      div.innerHTML = `<p><strong>${i + 1}. ${q.pregunta}</strong></p>` +
+        q.opciones.map((opt, j) => `
+          <label><input type="radio" name="q${i}" value="${j}"> ${opt}</label><br>`).join('');
+      container.appendChild(div);
+    });
+
+    document.getElementById('quizForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      let score = 0;
+      preguntas.forEach((q, i) => {
+        const answer = document.querySelector(`input[name="q${i}"]:checked`);
+        if (answer && parseInt(answer.value) === q.correcta) score++;
+      });
+      document.getElementById('result').textContent = `Obtuviste ${score} de ${preguntas.length} respuestas correctas.`;
+    });
+  </script></body>
+</html>
